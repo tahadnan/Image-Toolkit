@@ -14,17 +14,17 @@ def main():
     )
 
     parser.add_argument(
-        "interactive",
+        "-i","--interactive",
         action="store_true",
         help="Launch interactive mode with guided prompts"
     )
 
     subparsers = parser.add_subparsers(
         dest='command',
-        required=True,
         title='available commands',
         description='valid operations'
     )
+
     convert_parser = subparsers.add_parser(
         'convert',
         help='Convert image from one format to another',
@@ -60,14 +60,19 @@ def main():
     )
     args = parser.parse_args()
 
+    if not args.interactive and not args.command:
+        parser.error('A command is required unless using interactive mode (-i)')
+        
     if args.interactive:
         prompt.main()
     else:
         if args.command == 'convert':
-            print('test')
+            convert_image(args.input_image, args.output_format)
         elif args.command == 'resize':
-            print('test')
+            dimensions = parse_dimensions(args.dimensions)
+            downsize_image(args.input_image, dimensions, not args.force_dimensions)
         else:
             print("Invalid command")
 if __name__ == "__main__":
+    import sys
     main()

@@ -39,7 +39,7 @@ def get_image_info_quiet(image: Union[str, Path]) -> Dict[str, Any]:
 
 def get_image_info(image: Union[str, Path]) -> None:
     Info = get_image_info_quiet(image)
-    print("\n📸 Image Details 📸")
+    print("\n[*] Image Details [*]")
     print("─" * 40)
     for key, value in Info.items():
         print(f"• {key}: {value}")
@@ -61,7 +61,7 @@ def convert_image(image: Union[str, Path], target_format: str) -> Optional[str]:
         image = image.convert("RGB")
     
     image.save(saved_as, format=get_PIL_formats(target_format))
-    print("✨ Image converted successfully!")
+    print("[+] Image converted successfully!")
     get_image_info(saved_as)
 
 def downsize_image(
@@ -78,20 +78,20 @@ def downsize_image(
     if keep_aspect_ratio:
         downsized_image.thumbnail(new_size)
         final_size = downsized_image.size
-        print(f"🔍 Resized with aspect ratio preserved:")
+        print(f"[>] Resized with aspect ratio preserved:")
         print(f"   • Requested size: {requested_size[0]}x{requested_size[1]} pixels")
         print(f"   • Actual size:    {final_size[0]}x{final_size[1]} pixels")
         print(f"   • Original size:  {og_size[0]}x{og_size[1]} pixels")
     else:
         downsized_image = downsized_image.resize(new_size)
         final_size = downsized_image.size
-        print(f"🔧 Resized to exact dimensions: {new_size[0]}x{new_size[1]} pixels")
+        print(f"[>] Resized to exact dimensions: {new_size[0]}x{new_size[1]} pixels")
 
     size_str = f"{final_size[0]}x{final_size[1]}"
     saved_as = image_path / f"{name}_resized_{size_str}.{ext}"
 
     downsized_image.save(saved_as)
-    print("✨ Image resized successfully!")
+    print("[+] Image resized successfully!")
     get_image_info(saved_as)
 
 def parse_dimensions(dimension_string: str) -> Tuple[Tuple[int, int], bool]:
@@ -131,7 +131,7 @@ def verify_extension(ext: str, prompt: bool = False) -> bool:
 def prompt_help() -> None:
     print(
         '''
-        🛠️ Image Toolkit Help 🛠️
+        [?] Image Toolkit Help [?]
 
         Available Commands:
         1. convert   - Transform image to another format
@@ -147,16 +147,16 @@ def prompt_help() -> None:
 
 def prompt_convert_image() -> Optional[str]:
     while True:
-        input_image = prompt("📁 Enter path to image: ")
+        input_image = prompt("[>] Enter path to image: ")
         if not verify_path(input_image):
-            print("❌ Cannot find image at specified path. Please check and try again.")
+            print("[-] Cannot find image at specified path. Please check and try again.")
             continue
         if not verify_extension(Path(input_image).suffix):
-            print("❌ Unsupported image format. Please use a supported file type.")
+            print("[-] Unsupported image format. Please use a supported file type.")
             continue
         break
     print('''
-    📋 Supported Formats:
+    [i] Supported Formats:
     • PNG  - High quality with transparency
     • JPEG - Efficient compression for photos
     • GIF  - Animated images and simple graphics
@@ -165,50 +165,51 @@ def prompt_convert_image() -> Optional[str]:
     And much more...(Check the repo for more info)
     ''')
     while True:
-        output_format = prompt("""✏️ Enter desired format: """, wrap_lines=True)
+        output_format = prompt("[>] Enter desired format: ", wrap_lines=True)
         
         if verify_extension(output_format, prompt=True):
             break
-        print("❌ Invalid format selected. Please choose from the supported formats.")
+        print("[-] Invalid format selected. Please choose from the supported formats.")
     return convert_image(image=input_image, target_format=output_format)
 
 def prompt_downsize_image() -> Optional[None]:
     while True:
-        input_image = prompt("📁 Enter path to image: ")
+        input_image = prompt("[>] Enter path to image: ")
         if not verify_path(input_image):
-            print("❌ Cannot find image at specified path. Please check and try again.")
+            print("[-] Cannot find image at specified path. Please check and try again.")
             continue
         if not verify_extension(Path(input_image).suffix):
-            print("❌ Unsupported image format. Please use a supported file type.")
+            print("[-] Unsupported image format. Please use a supported file type.")
             continue
             
         current_size = get_image_info_quiet(input_image).get("Dimensions")
-        print(f"📏 Current dimensions: {current_size}")
+        print(f"[i] Current dimensions: {current_size}")
         
         try:
-            new_dimensions = prompt("✏️ Enter new dimensions (e.g., 800x600): ")
+            new_dimensions = prompt("[>] Enter new dimensions (e.g., 800x600): ")
             dimensions_tuple = parse_dimensions(new_dimensions)
-            force_dimension = confirm("🔒 Maintain aspect ratio?", suffix=" (y/n) ")
+            force_dimension = confirm("[?] Maintain aspect ratio?", suffix=" (y/n) ")
             return downsize_image(image=input_image, new_size=dimensions_tuple, keep_aspect_ratio=force_dimension)
         except ValueError as e:
-            print(f"❌ Error: {e}")
-            if not confirm("🔄 Try again?"):
+            print(f"[-] Error: {e}")
+            if not confirm("[?] Try again?"):
                 return None
             continue
 
 def prompt_info() -> None:
     while True:
-        input_image = prompt("📁 Enter path to image: ")
+        input_image = prompt("[>] Enter path to image: ")
         if not verify_path(input_image):
-            print("❌ Cannot find image at specified path. Please check and try again.")
+            print("[-] Cannot find image at specified path. Please check and try again.")
             continue
         if not verify_extension(Path(input_image).suffix):
-            print("❌ Unsupported image format. Please use a supported file type.")
+            print("[-] Unsupported image format. Please use a supported file type.")
             continue
         break
     get_image_info(input_image)
 
 def prompt_exit():
     return confirm("Want to exit?")
+
 if __name__ == "__main__":
     prompt_downsize_image()
