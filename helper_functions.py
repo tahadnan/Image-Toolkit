@@ -135,7 +135,7 @@ def prompt_help() -> None:
 
         Available Commands:
         1. convert   - Transform image to another format
-        2. Downsize  - Downsize image dimensions
+        2. downsize  - Downsize image dimensions
         3. info      - View image details
         4. exit      - Close program
         5. help      - Displays this message

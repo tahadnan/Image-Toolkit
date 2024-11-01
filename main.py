@@ -10,7 +10,7 @@ def main():
     and resizing. Supports various image formats including PNG, JPEG, WEBP, 
     and many more.
     """.strip(),
-    epilog="Example: image-toolkit convert image.png webp | image-toolkit resize image.jpg 800x600"
+    epilog="Example: image-toolkit convert image.png webp | image-toolkit downsize image.jpg 800x600"
     )
 
     parser.add_argument(
@@ -40,20 +40,20 @@ def main():
     )
 
 
-    resize_parser = subparsers.add_parser(
-        'resize',
-        help='Resize image to specified dimensions',
-        description='Resize images while optionally preserving aspect ratio'
+    downsize_parser = subparsers.add_parser(
+        'downsize',
+        help='Downsize image to specified dimensions',
+        description='Downsize images while optionally preserving aspect ratio'
     )
-    resize_parser.add_argument(
+    downsize_parser.add_argument(
         'input_image',
         help='Path to the source image file'
     )
-    resize_parser.add_argument(
+    downsize_parser.add_argument(
         'dimensions',
         help='Target dimensions in WxH format (e.g., 800x600)'
     )
-    resize_parser.add_argument(
+    downsize_parser.add_argument(
         "-f", "--force-dimensions",
         action="store_true",
         help="Force exact dimensions without preserving aspect ratio"
@@ -62,13 +62,13 @@ def main():
 
     if not args.interactive and not args.command:
         parser.error('A command is required unless using interactive mode (-i)')
-        
+
     if args.interactive:
         prompt.main()
     else:
         if args.command == 'convert':
             convert_image(args.input_image, args.output_format)
-        elif args.command == 'resize':
+        elif args.command == 'downsize':
             dimensions = parse_dimensions(args.dimensions)
             downsize_image(args.input_image, dimensions, not args.force_dimensions)
         else:
