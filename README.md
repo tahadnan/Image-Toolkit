@@ -68,6 +68,11 @@ python main.py downsize input_image.jpg 800x600
 python main.py downsize input_image.jpg 800x600 -f
 ```
 
+#### Get Image Info
+```bash
+python main.py info input_image.jpg
+```
+
 ## Examples
 
 1. Convert PNG to JPEG:
@@ -82,7 +87,7 @@ python main.py downsize image.jpg 1920x1080
 
 3. Get image information :
 ```bash
-python main.py image.gif
+python main.py info image.gif
 ```
 
 ## Command Line Arguments
