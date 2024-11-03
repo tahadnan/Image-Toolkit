@@ -1,6 +1,6 @@
 import PIL
 from PIL.Image import Image 
-from pathlib import Path, PurePath
+from pathlib import Path
 from typing import Union, Tuple, Optional, Dict, Any, Literal
 from constants import SUPPORTED_IMAGE_TYPES, SUPPORTED_IMAGE_TYPES_EXT, SUPPORTED_IMAGE_TYPES_DICT
 from pprint import pprint
@@ -17,16 +17,15 @@ def open_image(image: Union[str, Path]) -> Tuple[Image, str, Path, str]:
     image_path = Path(image)
 
     if not image_path.exists():
-        raise FileNotFoundError(f"Unable to locate image at: {image_path}")
+        raise FileNotFoundError(f"Unable to locate image at: {image_path.resolve()}")
     if not image_path.is_file():
-        raise ValueError(f"The specified path does not point to a file: {image_path}")
-
+        raise ValueError(f"The specified path does not point to a file: {image_path.resolve()}")
     if image_path.suffix not in SUPPORTED_IMAGE_TYPES_EXT:
-        raise ValueError(f"Unsupported file format '{image_path.suffix}' for : {image_path}")
+        raise ValueError(f"Unsupported file format '{image_path.suffix}' for : {image_path.resolve()}")
 
     return (PIL.Image.open(image_path), image_path.stem, image_path.parent, image_path.suffix.replace(".", ""))
 
-def get_image_info_quiet(image: Union[str, Path]) -> Dict[str, Any]:
+def get_image_info(image: Union[str, Path], quiet: bool = False) -> Union[Dict[str, Any], str]:
     image, name, image_path, _ = open_image(image)
     Info = {
         "File Name": name,
@@ -35,10 +34,8 @@ def get_image_info_quiet(image: Union[str, Path]) -> Dict[str, Any]:
         "Dimensions": f"{image.size[0]}x{image.size[1]} pixels",
         "Color Mode": image.mode
     }
-    return Info
-
-def get_image_info(image: Union[str, Path]) -> None:
-    Info = get_image_info_quiet(image)
+    if quiet:
+        return Info
     print("\n[*] Image Details [*]")
     print("─" * 40)
     for key, value in Info.items():
@@ -182,7 +179,7 @@ def prompt_downsize_image() -> Optional[None]:
             print("[-] Unsupported image format. Please use a supported file type.")
             continue
             
-        current_size = get_image_info_quiet(input_image).get("Dimensions")
+        current_size = get_image_info(input_image, quiet=True).get("Dimensions")
         print(f"[i] Current dimensions: {current_size}")
         
         try:
