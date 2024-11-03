@@ -41,7 +41,7 @@ pip install -r requirements.txt
 Launch the interactive interface with guided prompts:
 
 ```bash
-python main.py -i
+python image_toolkit.py -i
 ```
 
 Available commands in interactive mode:
@@ -56,38 +56,38 @@ Available commands in interactive mode:
 
 #### Convert Image Format
 ```bash
-python main.py convert input_image.jpg png
+python image_toolkit.py convert input_image.jpg png
 ```
 
 #### downsize Image
 ```bash
 # Preserve aspect ratio
-python main.py downsize input_image.jpg 800x600
+python image_toolkit.py downsize input_image.jpg 800x600
 
 # Force exact dimensions
-python main.py downsize input_image.jpg 800x600 -f
+python image_toolkit.py downsize input_image.jpg 800x600 -f
 ```
 
 #### Get Image Info
 ```bash
-python main.py info input_image.jpg
+python image_toolkit.py info input_image.jpg
 ```
 
 ## Examples
 
 1. Convert PNG to JPEG:
 ```bash
-python main.py convert image.png jpg
+python image_toolkit.py convert image.png jpg
 ```
 
 2. downsize image to 1920x1080 (maintaining aspect ratio):
 ```bash
-python main.py downsize image.jpg 1920x1080
+python image_toolkit.py downsize image.jpg 1920x1080
 ```
 
 3. Get image information :
 ```bash
-python main.py info image.gif
+python image_toolkit.py info image.gif
 ```
 
 ## Command Line Arguments

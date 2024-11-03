@@ -1,8 +1,9 @@
 import PIL
 from PIL.Image import Image 
 from pathlib import Path
+from os import PathLike
 from typing import Union, Tuple, Optional, Dict, Any, Literal
-from constants import SUPPORTED_IMAGE_TYPES, SUPPORTED_IMAGE_TYPES_EXT, SUPPORTED_IMAGE_TYPES_DICT
+from constants import SUPPORTED_IMAGE_TYPES, SUPPORTED_IMAGE_TYPES_EXT, SUPPORTED_IMAGE_TYPES_DICT, ImageInfo, ImagePath, ImageDimensions
 from pprint import pprint
 from collections import OrderedDict
 from prompt_toolkit import prompt
@@ -13,7 +14,7 @@ def get_PIL_formats(format: str) -> Optional[str]:
     clean_format = format.lower().lstrip('.')
     return SUPPORTED_IMAGE_TYPES_DICT.get(clean_format, None)
 
-def open_image(image: Union[str, Path]) -> Tuple[Image, str, Path, str]:
+def open_image(image: ImagePath) -> Tuple[Image, str, Path, str]:
     image_path = Path(image)
 
     if not image_path.exists():
@@ -25,9 +26,9 @@ def open_image(image: Union[str, Path]) -> Tuple[Image, str, Path, str]:
 
     return (PIL.Image.open(image_path), image_path.stem, image_path.parent, image_path.suffix.replace(".", ""))
 
-def get_image_info(image: Union[str, Path], quiet: bool = False) -> Union[Dict[str, Any], str]:
+def get_image_info(image: ImagePath, quiet: bool = False) -> Union[ImageInfo, str]:
     image, name, image_path, _ = open_image(image)
-    Info = {
+    Info: ImageInfo = {
         "File Name": name,
         "Location": str(image_path.resolve()),
         "Format": image.format,
@@ -42,7 +43,7 @@ def get_image_info(image: Union[str, Path], quiet: bool = False) -> Union[Dict[s
         print(f"• {key}: {value}")
     print("─" * 40 + "\n")
 
-def convert_image(image: Union[str, Path], target_format: str) -> Optional[str]:
+def convert_image(image: ImagePath, target_format: str) -> Optional[str]:
     image, name, image_path, _ = open_image(image)
     clean_format = target_format.lower().lstrip('.')
 
@@ -62,8 +63,8 @@ def convert_image(image: Union[str, Path], target_format: str) -> Optional[str]:
     get_image_info(saved_as)
 
 def downsize_image(
-    image: Union[str, Path], 
-    new_size: Tuple[int, int], 
+    image: ImageDimensions, 
+    new_size: ImageDimensions, 
     keep_aspect_ratio: bool = True
 ) -> None:
 
@@ -113,7 +114,7 @@ def parse_dimensions(dimension_string: str) -> Tuple[Tuple[int, int], bool]:
     except ValueError as e:
         raise ValueError("Please enter valid positive numbers for width and height in WxH format")
 
-def verify_path(fp: Union[str, Path]) -> bool:
+def verify_path(fp: ImagePath) -> bool:
     file_path = Path(fp)
     if file_path.exists() and not file_path.is_dir():
         return True
@@ -208,5 +209,4 @@ def prompt_info() -> None:
 def prompt_exit():
     return confirm("Want to exit?")
 
-if __name__ == "__main__":
-    prompt_downsize_image()
+
