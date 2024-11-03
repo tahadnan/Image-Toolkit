@@ -80,23 +80,25 @@ python main.py convert image.png jpg
 python main.py downsize image.jpg 1920x1080
 ```
 
-3. Get image information (interactive mode):
+3. Get image information :
 ```bash
-python main.py -i
-> info
+python main.py image.gif
 ```
 
 ## Command Line Arguments
 
 ```
-usage: image-toolkit [-h] [-i] {convert,downsize} ...
+usage: image-toolkit [-h] [-i] {info,convert,downsize} ...
 
 options:
   -h, --help         show this help message and exit
   -i, --interactive  Launch interactive mode with guided prompts
 
 available commands:
-  {convert,downsize}   valid operations
+  valid operations
+
+  {info,convert,downsize}   
+    info            Displays the given image info
     convert         Convert image from one format to another
     downsize        Downsize image to specified dimensions
 ```
