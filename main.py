@@ -25,6 +25,16 @@ def main():
         description='valid operations'
     )
 
+    info_parser = subparsers.add_parser(
+        'info',
+        help='Displays the given image info',
+        description='Displays the given image Name,Location(Path),Format,Dimesnsions and color mode'
+    )
+    info_parser.add_argument(
+        "input_image",
+        help="Path to the source image file"
+    )
+
     convert_parser = subparsers.add_parser(
         'convert',
         help='Convert image from one format to another',
@@ -58,6 +68,7 @@ def main():
         action="store_true",
         help="Force exact dimensions without preserving aspect ratio"
     )
+ 
     args = parser.parse_args()
 
     if not args.interactive and not args.command:
@@ -71,6 +82,8 @@ def main():
         elif args.command == 'downsize':
             dimensions = parse_dimensions(args.dimensions)
             downsize_image(args.input_image, dimensions, not args.force_dimensions)
+        elif args.command == 'info':
+            get_image_info(args.input_image)
         else:
             print("Invalid command")
 if __name__ == "__main__":

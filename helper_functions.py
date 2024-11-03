@@ -22,7 +22,7 @@ def open_image(image: Union[str, Path]) -> Tuple[Image, str, Path, str]:
         raise ValueError(f"The specified path does not point to a file: {image_path}")
 
     if image_path.suffix not in SUPPORTED_IMAGE_TYPES_EXT:
-        raise ValueError(f"Unsupported file format '{image_path.suffix}' for image: {image_path}")
+        raise ValueError(f"Unsupported file format '{image_path.suffix}' for : {image_path}")
 
     return (PIL.Image.open(image_path), image_path.stem, image_path.parent, image_path.suffix.replace(".", ""))
 
