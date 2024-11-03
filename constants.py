@@ -1,4 +1,4 @@
-from typing import Final, List, Dict, Tuple, Any
+from typing import Final, List, Dict, Tuple, Any, TypeAlias
 from PIL import Image
 from os import PathLike
 
