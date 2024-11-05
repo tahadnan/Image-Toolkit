@@ -1,6 +1,6 @@
 from helper_functions import prompt_help, prompt_convert_image, prompt_downsize_image, prompt_info, prompt_exit
 from prompt_toolkit import prompt
-import os
+import os, sys
 def clear_screen():
     if os.name == 'nt':
         _ = os.system('cls')                 
@@ -28,9 +28,12 @@ def main():
             else:
                 print("Invalid command, run help for available commands.")
         except (KeyboardInterrupt, EOFError) :
-            if prompt_exit():
-                print("Have a good day ^^.")
-                break
-            else:
-                continue
+            try:
+                if prompt_exit():
+                    print("Have a good day ^^.")
+                    break
+                else:
+                    continue
+            except (KeyboardInterrupt, EOFError):
+                sys.exit()
 
